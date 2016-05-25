@@ -14,11 +14,13 @@ class Chip8 {
         Chip8();
         virtual ~Chip8();
 
-    private:
-
+        void load_rom(const char*);
         void fetch_instruction();
         void run_instruction();
 
+        void dump_memory();
+
+    private:
         uint16_t m_opcode;
 
         uint8_t m_memory[MEMORY_SIZE];
@@ -28,7 +30,7 @@ class Chip8 {
 
         uint16_t m_stack[STACK_SIZE];
         
-        uint8_t m_stack_pointer;
+        int m_stack_pointer;
 
         uint16_t m_program_counter;
 
