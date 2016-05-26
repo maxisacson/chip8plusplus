@@ -69,22 +69,23 @@ void Chip8::run_instruction() {
     // It accomplishes this by deconstructin the instruction into 4 nibbles (1 nibble is 4 bits),
     // does a swich on the first nibble and then act accordingly.
     
-    uint8_t first_nibble  = (m_opcode & 0xf000) >> 12;
-    uint8_t second_nibble = (m_opcode & 0x0f00) >> 8;
-    uint8_t third_nibble  = (m_opcode & 0x00f0) >> 4;
-    uint8_t fourth_nibble = (m_opcode & 0x000f) >> 0;
+    uint8_t  first_nibble  = (m_opcode & 0xf000) >> 12;
+    uint8_t  second_nibble = (m_opcode & 0x0f00) >>  8;
+    uint8_t  third_nibble  = (m_opcode & 0x00f0) >>  4;
+    uint8_t  fourth_nibble = (m_opcode & 0x000f) >>  0;
     
-    uint8_t register_x    = second_nibble;
-    uint8_t register_y    = third_nibble;
+    uint8_t  register_x    = second_nibble;
+    uint8_t  register_y    = third_nibble;
 
-    uint8_t value_n       = (m_opcode & 0x000f);
-    uint8_t value_nn      = (m_opcode & 0x00ff);
-    uint16_t value_nnn    = (m_opcode & 0x0fff);
+    uint8_t  value_n       = (m_opcode & 0x000f);
+    uint8_t  value_nn      = (m_opcode & 0x00ff);
+    uint16_t value_nnn     = (m_opcode & 0x0fff);
 
     switch(first_nibble) { 
         case 0x2:
             // Calls subroutine at NNN
-            m_stack[++m_stack_pointer] = value_nnn;
+            m_stack[++m_stack_pointer] = m_program_counter;
+            m_program_counter = value_nnn;
             break;
         case 0x7:
             // Adds NN to VX
