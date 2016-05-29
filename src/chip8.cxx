@@ -105,7 +105,7 @@ void Chip8::run_instruction() {
                     throw -1;
                     break;
             }
-        break;
+            break;
         case 0x1:
             // Jumps to address NNN
             m_program_counter = value_nnn;

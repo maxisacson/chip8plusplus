@@ -82,6 +82,7 @@ class Chip8 {
         // The keypad table will store 1 when the key is pressed and 0 when it is released.
         uint8_t m_keypad[KEYPAD_SIZE];
 
+    public:
         // The screen of the Chip8 is 64 pixels wide and 32 pixels height. Each pixel has 2 states: ON (1)
         // or OFF (0). When a pixel is on it is drawn, otherwise not.
         uint8_t m_screen_buffer[SCREEN_HEIGHT*SCREEN_WIDTH];
