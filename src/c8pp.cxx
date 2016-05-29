@@ -5,9 +5,26 @@
 #include <SDL2/SDL_timer.h>
 
 int main(int argc, char** argv) {
+    // Initialize SDL and stuff
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0) {
         std::cerr << "SDL error: " << SDL_GetError() << std::endl;
-        return -2;
+        return 1;
+    }
+
+    SDL_Window *win = SDL_CreateWindow("Chip8++", 100, 100, 1024, 512, SDL_WINDOW_SHOWN);
+    if (!win) {
+        std::cerr << "SDL_CreateWindow error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return 1;
+    }
+
+    SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    if (!ren) {
+        SDL_DestroyWindow(win);
+        std::cerr << "SDL_Renderer error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return 1;
     }
 
     Chip8 cpu;
