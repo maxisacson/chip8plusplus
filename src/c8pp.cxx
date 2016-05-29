@@ -14,15 +14,16 @@ int main(int argc, char** argv) {
 
     unsigned int last_time = 0, current_time; 
     try {
-        current_time = SDL_GetTicks();
-        cpu.load_rom("roms/TETRIS");
+        cpu.load_rom("roms/INVADERS");
         while (true) {
             // TODO: Should the timers be decremented before of after running a instruction?
            
-            std::cout << "Current time: " << current_time << std::endl; 
-            if ( (current_time - last_time)*6 >= 100 ) {
+            current_time = SDL_GetTicks();
+            //std::cout << "Current time: " << current_time << std::endl; 
+            //std::cout << "dt:           " << current_time-last_time << std::endl; 
+            if ( (current_time - last_time) >= 1000/60 ) {
                 cpu.decrement_timers();
-                std::cout << 1./(current_time - last_time) << std::endl;
+                std::cout << 1000./(current_time - last_time) << std::endl;
                 last_time = current_time;
             }
             cpu.fetch_instruction();

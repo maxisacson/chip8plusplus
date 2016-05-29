@@ -48,6 +48,10 @@ void Chip8::load_rom(const char* rompath) {
     // load_rom reads a rom file from disk, and dumps the binary data in memory starting at 0x200
 
     std::ifstream rom(rompath, std::ios::binary); 
+    if (!rom) {
+        std::cerr << "--- Warning: Invalid rom file '" << rompath << "'" << std::endl;
+        throw -3;
+    }
     int offset = 0;
     while(rom) {
         char byte;
