@@ -50,8 +50,14 @@ int main(int argc, char** argv) {
         
     } catch (int e) {
         std::cerr << "--- Exception: " << e << std::endl;
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+
         return -1;
     }
+
+    SDL_DestroyWindow(win);
+    SDL_Quit();
 
     return 0;
 }
