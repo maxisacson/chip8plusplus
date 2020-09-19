@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-Chip8::Chip8() : 
+Chip8::Chip8() :
     m_opcode(0x0000),
     m_address_register(0x0000),
     m_stack_pointer(-1),
@@ -18,7 +18,7 @@ Chip8::Chip8() :
     // Clear the memory
     for (i = 0; i < MEMORY_SIZE; ++i) {
         m_memory[i] = 0x0;
-    } 
+    }
 
     // Clear all registers
     for (i = 0; i < REGISTERS; ++i) {
@@ -47,7 +47,7 @@ Chip8::~Chip8 () {
 void Chip8::load_rom(const char* rompath) {
     // load_rom reads a rom file from disk, and dumps the binary data in memory starting at 0x200
 
-    std::ifstream rom(rompath, std::ios::binary); 
+    std::ifstream rom(rompath, std::ios::binary);
     if (!rom) {
         std::cerr << "--- Warning: Invalid rom file '" << rompath << "'" << std::endl;
         throw -3;
@@ -77,12 +77,12 @@ void Chip8::run_instruction() {
     // run_instruction is responsible for running the instruction fetched by fetch_instruction.
     // It accomplishes this by deconstructin the instruction into 4 nibbles (1 nibble is 4 bits),
     // does a swich on the first nibble and then act accordingly.
-    
+
     uint8_t  first_nibble  = (m_opcode & 0xf000) >> 12;
     uint8_t  second_nibble = (m_opcode & 0x0f00) >>  8;
     uint8_t  third_nibble  = (m_opcode & 0x00f0) >>  4;
     uint8_t  fourth_nibble = (m_opcode & 0x000f) >>  0;
-    
+
     uint8_t  register_x    = second_nibble;
     uint8_t  register_y    = third_nibble;
 
@@ -90,7 +90,7 @@ void Chip8::run_instruction() {
     uint8_t  value_nn      = (m_opcode & 0x00ff);
     uint16_t value_nnn     = (m_opcode & 0x0fff);
 
-    switch(first_nibble) { 
+    switch(first_nibble) {
         case 0x0:
             switch(fourth_nibble) {
                 case 0x0:
@@ -145,7 +145,7 @@ void Chip8::run_instruction() {
                     m_registers[register_x] = m_registers[register_y];
                     break;
                 default:
-                    std::cerr << "--- Warning: We should never be in this state: " << 
+                    std::cerr << "--- Warning: We should never be in this state: " <<
                         std::hex << m_opcode << std::endl;
                     throw -1;
                     break;
@@ -187,7 +187,7 @@ void Chip8::run_instruction() {
                     }
                     break;
                 default:
-                    std::cerr << "--- Warning: We should never be in this state: " << 
+                    std::cerr << "--- Warning: We should never be in this state: " <<
                         std::hex << m_opcode << std::endl;
                     throw -1;
                     break;
@@ -230,12 +230,12 @@ void Chip8::run_instruction() {
 void Chip8::draw_to_screen(uint8_t reg_x, uint8_t reg_y, uint8_t height) {
     // draw_to_screen is responsible of drawing to the screen buffer
 
-    // Sprites stored in memory at location in index register (I), 8bits wide. Wraps around the 
-    // screen. If when drawn, clears a pixel, register VF is set to 1 otherwise it is zero. All 
-    // drawing is XOR drawing (i.e. it toggles the screen pixels). Sprites are drawn starting at 
-    // position VX, VY. N is the number of 8bit rows that need to be drawn. If N is greater than 1, 
+    // Sprites stored in memory at location in index register (I), 8bits wide. Wraps around the
+    // screen. If when drawn, clears a pixel, register VF is set to 1 otherwise it is zero. All
+    // drawing is XOR drawing (i.e. it toggles the screen pixels). Sprites are drawn starting at
+    // position VX, VY. N is the number of 8bit rows that need to be drawn. If N is greater than 1,
     // second line continues at position VX, VY+1, and so on.
-    
+
     uint16_t start_x = m_registers[reg_x];
     uint16_t start_y = m_registers[reg_y];
 
@@ -246,8 +246,8 @@ void Chip8::draw_to_screen(uint8_t reg_x, uint8_t reg_y, uint8_t height) {
     uint16_t pos_x         = 0x0;
     uint16_t pos_y         = 0x0;
 
-    m_registers[0xf] = 0x0; 
-    
+    m_registers[0xf] = 0x0;
+
     for (int line_y = 0; line_y < height; ++line_y) {
         sprite = m_memory[m_address_register + line_y];
         pos_y = start_y + line_y;
